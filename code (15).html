@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lighthouse Studios - Custom 2x3 Photo Magnets</title>
+    <style>
+        /* Soft Color Scheme Based on #FFF9F3 */
+        :root {
+            --header-bg: #FBFAF1;        /* Light cream - as specified for logo */
+            --background: #FFF9F3;       /* Light peach/cream (255, 249, 243) */
+            --primary: #E9DFD8;          /* Soft neutral taupe */
+            --primary-light: #F2EBE6;    /* Lighter soft cream */
+            --primary-dark: #D8CEC7;     /* Deeper neutral taupe */
+            --accent: #C2967D;           /* Muted terracotta/caramel */   
+            --secondary-accent: #7D9BA6; /* Muted dusty blue */
+            --text: #5D4037;             /* Dark brown for good contrast */
+            --text-light: #8D6E63;       /* Lighter brown */
+            --white: #FFFFFF;            /* Pure white */
+        }
+        
+        /* Basic styles */
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            color: var(--text);
+            background-color: var(--background);
+        }
+        
+        header {
+            background-color: var(--header-bg);
+            color: var(--text);
+            padding: 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        .header-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .logo-container {
+            width: 372px;
+            height: 242px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0 auto;
+        }
+        
+        .logo-image {
+            max-width: 100%;
+            max-height: 100%;
+        }
+        
+        nav {
+            width: 100%;
+            background-color: var(--primary);
+            padding: 1rem 0;
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+            padding: 0;
+            justify-content: center;
+            margin: 0;
+        }
+        
+        nav li {
+            margin: 0 20px;
+        }
+        
+        nav a {
+            color: var(--text);
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.3s;
+        }
+        
+        nav a:hover {
+            color: var(--accent);
+        }
+        
+        .hero {
+            background-color: var(--primary-light);
+            color: var(--text);
+            padding: 4rem 0;
+            text-align: center;
+        }
+        
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .btn {
+            display: inline-block;
+            background-color: var(--accent);
+            color: var(--white);
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            margin-top: 1rem;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .btn:hover {
+            background-color: #AF856F;
+        }
+        
+        .categories, .featured-products, .about, .contact, .design-section {
+            padding: 3rem 0;
+        }
+        
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 2rem;
+        }
+        
+        .product-card {
+            border: 1px solid var(--primary-light);
+            border-radius: 5px;
+            padding: 1rem;
+            text-align: center;
+            background-color: var(--white);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .product-card img {
+            max-width: 100%;
+            height: auto;
+        }
+        
+        .product-price {
+            font-weight: bold;
+            color: var(--accent);
+        }
+        
+        footer {
+            background-color: var(--primary);
+            color: var(--text);
+            padding: 2rem 0;
+            text-align: center;
+        }
+        
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--text);
+        }
+        
+        input, textarea, select {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid var(--primary-light);
+            border-radius: 5px;
+            background-color: var(--white);
+        }
+
+        /* Cart drawer styles */
+        .cart-drawer {
+            position: fixed;
+            top: 0;
+            right: -400px;
+            width: 400px;
+            height: 100vh;
+            background-color: var(--white);
+            box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
+            transition: right 0.3s ease;
+            z-index: 1000;
+            overflow-y: auto;
+        }
+
+        .cart-drawer.open {
+            right: 0;
+        }
+
+        .cart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            border-bottom: 1px solid var(--primary-light);
+            background-color: var(--primary-light);
+        }
+
+        #close-cart {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text);
+        }
+
+        .cart-items {
+            padding: 1rem;
+            max-height: calc(100vh - 150px);
+            overflow-y: auto;
+        }
+
+        .cart-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--primary-light);
+        }
+
+        .cart-item img {
+            margin-right: 1rem;
+            border: 1px solid var(--primary-light);
+        }
+
+        .cart-item h4 {
+            margin: 0 0 0.5rem;
+        }
+
+        .cart-item p {
+            margin: 0;
+        }
+
+        .remove-item {
+            background: none;
+            border: none;
+            color: var(--accent);
+            font-size: 1.2rem;
+            cursor: pointer;
+            margin-left: auto;
+        }
+
+        .cart-footer {
+            padding: 1rem;
+            border-top: 1px solid var(--primary-light);
+            background-color: var(--primary-light);
+        }
+
+        .cart-total {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+            font-weight: bold;
+        }
+
+        .checkout-btn {
+            width: 100%;
+            background-color: var(--accent);
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: -300px;
+            background-color: var(--secondary-accent);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 4px;
+            transition: right 0.3s ease;
+            z-index: 2000;
+        }
+
+        .notification.error {
+            background-color: #E57373;
+        }
+
+        .notification.show {
+            right: 20px;
+        }
+
+        /* Photo upload and preview styles */
+        .design-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            margin-top: 2rem;
+        }
+
+        .upload-section {
+            flex: 1;
+            min-width: 300px;
+            background-color: var(--white);
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .preview-section {
+            flex: 1;
+            min-width: 300px;
+            background-color: var(--white);
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .magnet-preview {
+            border: 1px solid var(--primary-light);
+            padding: 10px;
+            background-color: var(--background);
+            margin-top: 1rem;
+            text-align: center;
+            width: 100%;
+            max-width: 300px;
+        }
+
+        .magnet-preview img {
+            max-width: 200px;
+            max-height: 200px;
+            margin-bottom: 10px;
+            border: 1px solid var(--primary-light);
+        }
+
+        .upload-instructions {
+            background-color: var(--primary-light);
+            border: 1px solid var(--primary);
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+        }
+
+        .file-upload-container {
+            border: 2px dashed var(--primary);
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            margin-bottom: 20px;
+            background-color: var(--background);
+            transition: border-color 0.3s;
+        }
+
+        .file-upload-container:hover {
+            border-color: var(--accent);
+        }
+
+        #upload-progress {
+            height: 5px;
+            width: 0;
+            background-color: var(--accent);
+            margin-top: 10px;
+            transition: width 0.3s;
+        }
+
+        .quantity-selector {
+            display: flex;
+            align-items: center;
+            margin: 20px 0;
+        }
+
+        .quantity-selector button {
+            background: var(--primary-light);
+            border: none;
+            width: 30px;
+            height: 30px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            color: var(--text);
+        }
+
+        .quantity-selector input {
+            width: 50px;
+            text-align: center;
+            margin: 0 10px;
+        }
+
+        .testimonial {
+            background-color: var(--primary-light);
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+
+        .testimonial-author {
+            font-style: italic;
+            text-align: right;
+        }
+
+        .steps {
+            display: flex;
+            justify-content: space-between;
+            margin: 30px 0;
+            flex-wrap: wrap;
+        }
+
+        .step {
+            flex: 1;
+            text-align: center;
+            padding: 20px;
+            min-width: 200px;
+            margin-bottom: 20px;
+            background-color: var(--white);
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            transition: transform 0.3s;
+        }
+        
+        .step:hover {
+            transform: translateY(-5px);
+        }
+
+        .step-number {
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            background-color: var(--accent);
+            color: white;
+            border-radius: 50%;
+            line-height: 30px;
+            margin-bottom: 10px;
+        }
+        
+        h2, h3 {
+            color: var(--secondary-accent);
+        }
+        
+        section {
+            background-color: var(--background);
+        }
+        
+        section:nth-child(even) {
+            background-color: var(--white);
+        }
+    </style>
+</head>
+<body>
+    <!-- Header with navigation -->
+    <header>
+        <div class="header-content">
+            <div class="logo-container">
+                <!-- Updated with local file path -->
+                <img src="C:\Users\btraugher\Downloads\lighthouse.jpeg" alt="Lighthouse Studios Logo" class="logo-image">
+            </div>
+            <nav>
+                <div class="container">
+                    <ul>
+                        <li><a href="#home">Home</a></li>
+                        <li><a href="#how-it-works">How It Works</a></li>
+                        <li><a href="#design">Create Your Magnet</a></li>
+                        <li><a href="#about">About Us</a></li>
+                        <li><a href="#contact">Contact</a></li>
+                        <li><a href="#cart" id="cart-icon">Cart (<span id="cart-count">0</span>)</a></li>
+                    </ul>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Cart Drawer -->
+    <div id="cart-drawer" class="cart-drawer">
+        <div class="cart-header">
+            <h2>Your Cart</h2>
+            <button id="close-cart" onclick="toggleCartDrawer()">&times;</button>
+        </div>
+        <div id="cart-items" class="cart-items">
+            <!-- Cart items will be inserted here by JavaScript -->
+        </div>
+        <div class="cart-footer">
+            <div class="cart-total">
+                <span>Total:</span>
+                <span id="cart-total">$0.00</span>
+            </div>
+            <button class="btn checkout-btn" onclick="checkout()">Checkout</button>
+        </div>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="container">
+            <h1>Custom 2x3 Photo Magnets</h1>
+            <p>Turn your favorite photos into high-quality 2x3 inch magnets. Perfect for refrigerators, lockers, or any magnetic surface!</p>
+            <a href="#design" class="btn">Create Your Magnet Now</a>
+        </div>
+    </section>
+
+    <!-- Rest of the HTML remains the same as previously provided -->
+
+    <!-- How It Works -->
+    <section class="categories" id="how-it-works">
+        <div class="container">
+            <h2>How It Works</h2>
+            <div class="steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <h3>Upload Your Photo</h3>
+                    <p>Choose your favorite high-resolution photo from your device</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <h3>Preview & Customize</h3>
+                    <p>Preview how your magnet will look and adjust if needed</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <h3>Place Your Order</h3>
+                    <p>Select your quantity and complete your purchase</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <h3>Receive Your Magnets</h3>
+                    <p>Your custom magnets will arrive at your doorstep within 3-5 business days</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Products/Packages -->
+    <section class="featured-products">
+        <div class="container">
+            <h2>Popular Magnet Packages</h2>
+            <div class="product-grid">
+                <div class="product-card">
+                    <img src="https://via.placeholder.com/200x150" alt="Single Magnet">
+                    <h3>Single 2x3" Photo Magnet</h3>
+                    <p>Perfect for a special memory</p>
+                    <p class="product-price">$6.99</p>
+                    <a href="#design" class="btn">Create Now</a>
+                </div>
+                <div class="product-card">
+                    <img src="https://via.placeholder.com/200x150" alt="5-Pack Magnets">
+                    <h3>5-Pack 2x3" Photo Magnets</h3>
+                    <p>Use the same photo or mix up to 5 different images</p>
+                    <p class="product-price">$24.99</p>
+                    <a href="#design" class="btn">Create Now</a>
+                </div>
+                <div class="product-card">
+                    <img src="https://via.placeholder.com/200x150" alt="10-Pack Magnets">
+                    <h3>10-Pack 2x3" Photo Magnets</h3>
+                    <p>Our most popular option! Perfect for sharing with family and friends</p>
+                    <p class="product-price">$39.99</p>
+                    <a href="#design" class="btn">Create Now</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Design Your Magnet Section -->
+    <section class="design-section" id="design">
+        <div class="container">
+            <h2>Create Your Custom 2x3" Photo Magnet</h2>
+            
+            <div class="design-container">
+                <div class="upload-section">
+                    <div class="upload-instructions">
+                        <h3>Photo Requirements:</h3>
+                        <ul>
+                            <li>Minimum resolution: 600x900 pixels</li>
+                            <li>Maximum file size: 10MB</li>
+                            <li>Supported formats: JPG, PNG</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="file-upload-container" id="upload-container">
+                        <p>Drag & drop your photo here or</p>
+                        <input type="file" id="photo-upload" accept="image/jpeg, image/png" style="display: none">
+                        <button class="btn" onclick="document.getElementById('photo-upload').click()">Browse Files</button>
+                        <div id="upload-progress"></div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="quantity">Quantity:</label>
+                        <div class="quantity-selector">
+                            <button type="button" onclick="decreaseQuantity()">-</button>
+                            <input type="number" id="quantity" value="1" min="1" max="100">
+                            <button type="button" onclick="increaseQuantity()">+</button>
+                        </div>
+                    </div>
+                    
+                    <p class="product-price">Total: <span id="total-price">$6.99</span></p>
+                    
+                    <button class="btn" id="add-to-cart-btn" data-product-id="2x3-photo-magnet" disabled>Add to Cart</button>
+                </div>
+                
+                <div class="preview-section">
+                    <h3>Preview Your Magnet</h3>
+                    <div class="magnet-preview">
+                        <img id="preview-image" src="https://via.placeholder.com/200x300?text=Upload+Your+Photo" alt="Magnet Preview">
+                        <p>2x3 inch Photo Magnet</p>
+                    </div>
+                    <p>This is how your custom magnet will look. The high-quality printing ensures vibrant colors and sharp details.</p>
+                </div>
+            </div>
+            
+            <div class="testimonial">
+                <p>"I ordered custom magnets with pictures of my grandkids and they turned out beautiful! The quality is excellent and they look perfect on my refrigerator. Will definitely order more!"</p>
+                <p class="testimonial-author">- Sarah T., Verified Customer</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Us -->
+    <section class="about" id="about">
+        <div class="container">
+            <h2>About Lighthouse Studios</h2>
+            <p>Lighthouse Studios has been creating high-quality custom photo magnets since 2010. We use premium magnetic materials and state-of-the-art UV printing technology to ensure your photos look perfect and last for years without fading.</p>
+            <p>Our 2x3" magnets are made with thick, durable materials that won't bend or break. Each magnet features a strong magnetic backing that will securely hold to any magnetic surface.</p>
+        </div>
+    </section>
+
+    <!-- Contact Form -->
+    <section class="contact" id="contact">
+        <div class="container">
+            <h2>Contact Us</h2>
+            <form>
+                <div class="form-group">
+                    <label for="name">Name</label>
+                    <input type="text" id="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="message">Message</label>
+                    <textarea id="message" rows="5" required></textarea>
+                </div>
+                <button type="submit" class="btn">Send Message</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <p>&copy; 2026 Lighthouse Studios. All rights reserved.</p>
+            <p>123 Beacon Way, Harbor City, CA 90710</p>
+            <p>Phone: (555) 123-4567 | Email: info@lighthousestudios.com</p>
+        </div>
+    </footer>
+
+    <!-- The JavaScript section remains unchanged -->
+    <script>
+        // Shopify Cart JavaScript (same as previous version)
+        // ...
+    </script>
+</body>
+</html>
